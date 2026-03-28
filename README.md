@@ -1,6 +1,5 @@
 # IPIC: Implemented Photonic Interferometric Computing
 
-**Document ID:** IPIC-WP-2026-REAL-V6-EXTREME  
 **Classification:** Deep-Tech Photonic Accelerator Specification  
 **Author:** Juho Artturi Hemminki  
 **License:** Apache License 2.0  
