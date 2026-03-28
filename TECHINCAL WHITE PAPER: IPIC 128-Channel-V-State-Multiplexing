@@ -1,0 +1,53 @@
+Classification: Deep-Tech Photonic Accelerator Specification
+Author: Juho Artturi Hemminki
+License: Apache License 2.0
+Operational Paradigm: Phase-Coherent Radiate Computing
+
+    ARCHITECTURAL OVERVIEW: THE QUANTUM-CLASS PHOTONIC MESH
+
+The Implemented Photonic Interferometric Computing (IPIC) architecture represents a terminal departure from Von Neumann electron-based logic. While traditional CMOS accelerators (GPUs) suffer from Ohmic heating and interconnect RC-delay, IPIC-V128 utilizes the non-linear properties of Silicon Photonics (SiPh) and the superposition of light waves to perform massive Vector-Matrix Multiplications (VMM) at the speed of light (c/n).
+The core innovation lies in the V-State Multiplexing protocol, which allows 128 discrete data streams to occupy the same physical waveguide, effectively multiplying the compute density of a standard Mach-Zehnder Interferometer (MZI) mesh by two orders of magnitude.
+
+    THE MATHEMATICAL FOUNDATION OF V-STATE COMPUTING
+
+2.1. The Unitary Transfer Matrix
+A single MZI in the IPIC mesh operates as a U(2) unitary operator. The relationship between the input electric field vectors Ein and output Eout is defined by the complex transfer matrix:
+[ Eout,1 ] = e^(i phi) * [ cos(theta) isin(theta) ] * [ Ein,1 ]
+[ Eout,2 ] [ isin(theta) cos(theta) ] [ Ein,2 ]
+In the IPIC-V128 protocol, this operation is performed simultaneously for 128 wavelengths lambda_1, lambda_2, ..., lambda_128. The total output intensity Iout for a specific V-state n is:
+Iout(lambda_n) ~ |Ein(lambda_n)|^2 * cos^2( delta_phi(lambda_n) / 2 )
+2.2. Phase-State Modulation (GST Integration)
+To achieve non-volatile weight storage, IPIC utilizes Germanium-Antimony-Tellurium (GST). The phase shift delta_phi is a function of the effective refractive index n_eff, which is modulated by the crystalline state of the GST layer:
+delta_phi = (2 * pi * L / lambda) * ( delta_n_eff,GST )
+Where L is the interaction length and delta_n_eff,GST represents the transition between the amorphous and crystalline phases, allowing for multi-bit (analog) weight resolution without active power consumption.
+
+    THE "SINGING MACHINE" FEEDBACK DYNAMICS
+
+Thermal noise and environmental fluctuations threaten the coherence of the 128-channel stream. IPIC implements a high-speed PID (Proportional-Integral-Derivative) control loop, referred to as the Singing Machine, to maintain harmonic consonance.
+3.1. Spectral Drift Equation
+The resonance frequency nu of an IPIC micro-ring or MZI arm is sensitive to temperature T. The drift is governed by:
+d_nu / dT = - ( nu / n_g ) * ( d_n_eff / dT + n_eff * alpha_sub )
+Where n_g is the group index and alpha_sub is the thermal expansion coefficient of the substrate.
+3.2. Real-Time Phase Recovery
+The PID controller minimizes the error signal epsilon(t) from the integrated Germanium photodetectors:
+u(t) = Kp * epsilon(t) + Ki * integral[0 to t]( epsilon(tau) d_tau ) + Kd * ( d_epsilon(t) / dt )
+This u(t) signal drives the 3D-stacked micro-heaters in the Logic Layer, ensuring that all 128 V-states remain phase-locked with a residual error sigma_phi < 0.01 rad.
+
+    SYSTEM-ON-A-CHIP: 3D HYBRID INTEGRATION
+
+To solve the control-circuitry footprint, IPIC-V128 utilizes a Heterogeneous Stacked Die approach:
+
+    Optical Computing Layer (SOI): Contains the 128-channel WDM comb filters, the MZI mesh with GST weights, and the Flight Cache (Optical Delay Lines).
+    Logic & Control Layer (CMOS): A high-density 5nm or 3nm ASIC containing the PID controllers, the Weight-Update DMA engine, and the TIA (Transimpedance Amplifiers) for O/E conversion.
+    The Interconnect (Hybrid Bonding): Direct copper-to-copper bonding between layers allows for a vertical pitch of < 10 um, enabling billions of vias to connect the PID logic directly to the MZI heaters.
+    PHOTONIC ENERGY SCALING LAWS
+
+The energy efficiency of IPIC-V128 is governed by the fact that the actual "calculation" (interference) is passive. The energy per operation E_op scales as:
+E_op = ( P_laser + P_control ) / BW_total
+Where P_laser is the power of the shared frequency comb and BW_total is the aggregate bandwidth of 128 channels. Because P_control is minimized by the non-volatile GST weights, the energy scaling is O(1) relative to matrix size, whereas traditional electronic scaling is O(N^2).
+
+    CONCLUSION: RADIANT SUPREMACY
+
+IPIC 128-Channel-V-State-Multiplexing transforms the silicon chip into a resonant mathematical instrument. By encoding neural network tensors into the phase and amplitude of 128 coherent light waves, we bypass the physical limits of electronics. This is not a processor that "works"; it is a machine that resonates.
+
+Released under Apache License 2.0. Commercial derivatives must credit Juho Artturi Hemminki.
