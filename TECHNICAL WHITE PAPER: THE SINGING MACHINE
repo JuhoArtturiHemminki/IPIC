@@ -1,0 +1,64 @@
+Classification: Proprietary Photonic Control Specification
+Author: Juho Artturi Hemminki
+License: Apache License 2.0 (Commercial attribution required)
+
+    ABSTRACT: THE THERMAL HETERODYNE CHALLENGE
+    The scalability of Photonic Interferometric Computing (PIC) is fundamentally limited by phase decoherence. In a large-scale N x N Mach-Zehnder Interferometer (MZI) mesh, even a millikelvin temperature shift (delta_T) induces a refractive index change (dn/dT) that causes phase-rotational errors. This document specifies the "Singing Machine," a proprietary architectural framework for real-time phase-drift compensation using spectral heterodyne monitoring and a multi-stage PID feedback loop.
+    SYSTEM ARCHITECTURE: THE RESONANT CONTROL PLANE
+    The Singing Machine operates as a "Control Plane" layered above the "Compute Plane" (the MZI mesh). It treats the entire photonic circuit as a tuned resonant cavity.
+
+2.1. Pilot Tone Injection (Spectral Reference)
+The system injects a coherent "Reference Pilot Tone" (lambda_ref) at a wavelength slightly offset from the data carrier (lambda_data). This reference signal traverses the same waveguide geometry as the data, thus experiencing identical thermal-optic perturbations.
+2.2. In-Situ Optical Sampling
+At every 10th junction in a Clements/Reck topology, a 1% tap-coupler diverts a fraction of the power to an Integrated Germanium (Ge) Photodetector (PD). These PDs monitor the "Interference State" of the pilot tone.
+
+    THE PHYSICS OF THE SINGING MACHINE (MATHEMATICAL MODEL)
+
+3.1. The Refractive Index Perturbation (dn/dT)
+In silicon-on-insulator (SOI) waveguides, the effective refractive index (n_eff) is:
+n_eff(T) = n_0 + (dn/dT) * (T - T_0)
+For silicon, dn/dT is approximately 1.8 x 10^-4 K^-1.
+3.2. Phase Error Equation (Epsilon)
+The phase shift (phi) in an MZI arm of length L is:
+phi = (2 * pi / lambda) * n_eff * L
+The Singing Machine detects the error epsilon(t):
+epsilon(t) = |phi_target - phi_measured(t)|
+3.3. Heterodyne Beat Detection
+By comparing the reference tone with a local oscillator on-chip, the system detects a "Beat Frequency" (f_beat). Any shift in f_beat indicates a phase drift. This is why the system is called the "Singing Machine" – it "listens" to the frequency shift of the light.
+
+    THE "TRIPLE-GAIN" COMPENSATION ENGINE (PID)
+
+The Singing Machine utilizes a high-speed PID (Proportional-Integral-Derivative) controller implemented in the CMOS-layer (bonded to the photonic die).
+4.1. The Control Equation
+The correction power (P_corr) applied to the Ti/Au micro-heaters is:
+P_corr(t) = K_p * e(t) + K_i * Integral[e(tau) dtau] + K_d * (de/dt)
+
+    Proportional (K_p): Corrects for immediate, low-amplitude thermal drift.
+    Integral (K_i): Accumulates and eliminates steady-state errors caused by the chip's ambient operating temperature.
+    Derivative (K_d): Counteracts rapid "Thermal Spikes" caused by high-density data bursts in adjacent waveguides (Crosstalk Compensation).
+
+    HARMONIC CONSONANCE AND GLOBAL LOCKING
+
+5.1. Unitary Matrix Stability
+In a programmable photonic mesh, the global transfer matrix (M) must remain Unitary (M*M^H = I). Phase drift destroys unitarity. The Singing Machine maintains the "Consonant State" where:
+Sum[ (M_ij_measured - M_ij_target)^2 ] < Sigma_noise
+5.2. Adaptive Gradient Descent (AGD)
+In addition to PID, the Singing Machine utilizes a low-frequency "Dither Signal" to perform on-chip gradient descent, finding the global "Phase Minimum" across thousands of MZIs simultaneously.
+
+    HARDWARE SPECIFICATIONS (TARGET 2026)
+
+    Sampling Rate: 100 MHz to 1 GHz (depending on thermal mass of the waveguide).
+    Phase Precision: < 0.001 pi radians (Equivalent to 12-bit DAC precision).
+    Power Overhead: < 5% of total chip power consumption.
+    Latency: Sub-nanosecond response time for the Electro-Optic (EO) phase-shifters.
+
+    INTELLECTUAL PROPERTY CLAIMS (SECTION 7 - IPIC-WP-2026)
+
+7.1. Concept: The "Singing Machine" as a dedicated spectral monitoring layer for MZI-mesh grids.
+7.2. Method: Real-time PID-controlled thermal drift compensation using heterodyne beat-frequency detection of an in-situ pilot tone.
+7.3. Implementation: The use of "Harmonic Consonance" as a metric for maintaining unitary matrix integrity in analog photonic accelerators.
+
+    CONCLUSION: THE FUTURE OF RADIANT COHERENCE
+    The Singing Machine is not merely a cooling solution; it is a stability protocol. By ensuring that every photon "sings" at the correct phase, we enable the first generation of truly scalable, high-precision photonic AI processors. The machine doesn't just calculate; it resonates with the data it processes.
+
+Released under Apache License 2.0. Commercial derivatives must credit Juho Artturi Hemminki.
