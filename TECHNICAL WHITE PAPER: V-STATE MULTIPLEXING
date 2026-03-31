@@ -1,0 +1,70 @@
+Classification: Proprietary Photonic Interconnect & Data-Protocol Specification
+Author: Juho Artturi Hemminki
+License: Apache License 2.0
+
+    EXECUTIVE SUMMARY: BEYOND BINARY SERIALIZATION
+    Traditional electronic computing is limited by the "SerDes Bottleneck" – the energy cost of moving data serially across metallic traces. V-State Multiplexing (Vector-State Multiplexing) is a proprietary photonic protocol that enables massive parallelization by encoding independent data vectors onto discrete optical frequencies (Wavelengths) within a single physical waveguide. By utilizing Frequency Comb Lasers and Coherent Detection, V-State allows for 128+ simultaneous Matrix-Vector Multiplications (VMM) in the same spatial volume, effectively multiplying compute density by the number of active V-States (N_v).
+    THE ARCHITECTURE OF V-STATES (SPECTRAL SLICING)
+    In the IPIC framework, a "V-State" is defined as a discrete, orthogonal computational channel.
+
+2.1. Frequency Comb Generation
+The system utilizes a Kerr-Microresonator or a Quantum Dot Laser to generate a "Spectral Comb" of phase-locked carriers:
+nu_n = nu_0 + n * Delta_f
+Where:
+
+    nu_0: Central pump frequency (c. 193 THz / 1550 nm).
+    n: Integer index of the V-State (1 to 128).
+    Delta_f: Channel spacing (e.g., 50 GHz or 100 GHz).
+
+2.2. Orthogonal Vector Encoding
+Each V-State (nu_n) carries a unique input vector (x_n). Because photons are bosons and do not interact in a linear medium, the total optical field (E_total) is a superposition:
+E_total(t) = Sum[ A_n(t) * exp(i * 2 * pi * nu_n * t + phi_n) ]
+
+    THE PHYSICS OF V-STATE COMPUTING (MATHEMATICAL MODEL)
+
+3.1. Parallel Matrix-Vector Multiplication (VMM)
+When E_total enters a programmable MZI-mesh (Unitary Grid U), the operation occurs simultaneously for all V-States. The output field (Y) for the n-th V-State is:
+Y_n = U(nu_n) * x_n
+3.2. Wavelength-Dependent Phase Dispersion
+A critical challenge in V-State multiplexing is the Chromatic Dispersion (D). The phase shift (phi) in an MZI arm varies with the wavelength (lambda_n):
+phi(lambda_n) = (2 * pi / lambda_n) * n_eff(lambda_n) * L
+The V-State protocol includes a "Dispersion Compensation Matrix" (DCM) that pre-distorts the input vectors to ensure that all 128 channels achieve the same logical rotation within the mesh, despite their differing frequencies.
+3.3. Throughput Equation (T)
+The total system throughput (T) is defined as:
+T = N_v * B * Q
+Where:
+
+    N_v: Number of V-States (e.g., 128).
+    B: Baud rate per channel (e.g., 50 GHz).
+    Q: Quantization bits (e.g., 8-bit or 16-bit analog precision).
+    Resulting in an aggregate bandwidth exceeding 1.6 Terabits/sec per waveguide.
+
+    COHERENT V-STATE DETECTION (MODULATION & DEMODULATION)
+
+4.1. Quadrature Amplitude Modulation (QAM) in V-Space
+Input data is encoded using IQ-modulators (In-phase/Quadrature). Each V-State can represent a complex value:
+S_n = I_n + i * Q_n
+This allows the IPIC core to perform complex-valued neural network operations (CVNN) natively, which is 2x more efficient for certain Transformer architectures.
+4.2. Spectral De-Multiplexing
+At the output of the compute core, a Micro-Ring Resonator (MRR) bank or an Arrayed Waveguide Grating (AWG) separates the V-States:
+P_out(nu_n) = |Y_n|^2
+The high-Q factor of the MRRs (Q > 10^5) ensures cross-talk suppression between adjacent V-States of > 30 dB.
+
+    ENERGY SCALING AND EFFICIENCY (O-LOGIC)
+
+5.1. The "Zero-Interaction" Principle
+Traditional GPUs consume energy proportional to N^2 (where N is the matrix size). In V-State IPIC, the laser power is the primary energy cost. Once the light is in the mesh, the cost of adding a second V-State (N_v = 2) is nearly zero, as the physical MZIs are already set.
+5.2. Energy-per-Bit (EPB)
+EPB_vstate = (P_laser + P_tuning) / (N_v * Baud_rate)
+As N_v increases, the energy cost per operation (FLOP/Joule) asymptotically approaches the quantum limit of the photodetector sensitivity.
+
+    INTELLECTUAL PROPERTY CLAIMS (SECTION 7 - IPIC-WP-2026-VS)
+
+6.1. Concept: The "V-State" as a fundamental unit of spectral-parallel computing in a photonic mesh.
+6.2. Protocol: The "V-State Multiplexing Protocol" for simultaneous execution of N independent neural network layers within a single unitary grid.
+6.3. Method: Chromatic Dispersion Compensation for frequency-agnostic unitary rotations in cascaded MZI topologies.
+
+    CONCLUSION: THE RADIANT MULTIPLEX
+    V-State Multiplexing is the key to unlocking "Exascale-on-a-Chip." By moving from single-wavelength computing to 128-channel V-State streams, we achieve a density and efficiency that silicon electronics cannot replicate. The future of AI is not just optical; it is multi-spectral.
+
+Released under Apache License 2.0. Commercial derivatives must credit Juho Artturi Hemminki.
