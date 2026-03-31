@@ -91,6 +91,7 @@ Since P_tuning (static) is minimal and P_laser is shared across 128+ WDM channel
 
     CONCLUSION: THE RADIANT REALITY
     Phase-Coherent Vibrational Computing is no longer a theoretical dream. Through Silicon Photonics (SiPh), MZIs, and WDM, we have created a machine that resonates with the mathematical structure of the problems it solves.
+    
     MANUFACTURING AND FABRICATION (MASS PRODUCTION LOGIC)
     10.1. CMOS Compatibility: IPIC is designed for 300mm Silicon-on-Insulator (SOI) wafers. The photonic layer is fabricated as a "Front-End-of-Line" (FEOL) or "Back-End-of-Line" (BEOL) addition, allowing integration with standard foundry processes at TSMC, Intel, or GlobalFoundries.
     10.2. Multi-Layer Photonic Stacking: Utilizing Through-Silicon Vias (TSV) and hybrid bonding to stack the photonic compute die directly on top of a high-speed HBM3e memory controller.
