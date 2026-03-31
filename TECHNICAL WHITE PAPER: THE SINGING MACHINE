@@ -1,6 +1,6 @@
 Classification: Proprietary Photonic Control Specification
 Author: Juho Artturi Hemminki
-License: Apache License 2.0 (Commercial attribution required)
+License: Apache License 2.0
 
     ABSTRACT: THE THERMAL HETERODYNE CHALLENGE
     The scalability of Photonic Interferometric Computing (PIC) is fundamentally limited by phase decoherence. In a large-scale N x N Mach-Zehnder Interferometer (MZI) mesh, even a millikelvin temperature shift (delta_T) induces a refractive index change (dn/dT) that causes phase-rotational errors. This document specifies the "Singing Machine," a proprietary architectural framework for real-time phase-drift compensation using spectral heterodyne monitoring and a multi-stage PID feedback loop.
